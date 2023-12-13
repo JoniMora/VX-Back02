@@ -7,9 +7,9 @@ router.post('/register', authController.register)
 router.post('/login', authController.login)
 router.post('/forgot-password', authController.forgotPassword)
 
-router.get('/ruta-protegida', authMiddleware, (req, res) => { //solo accede si el middleware verifica los tokens
-  res.json({ message: '¡Esta es una ruta protegida!' })
-})
+router.get('/protected-router', authMiddleware.authMiddleware, (req, res) => { //solo accede si el middleware verifica los tokens
+    res.json({ message: '¡Esta es una ruta protegida!' })
+  })
 
 module.exports = router
 
