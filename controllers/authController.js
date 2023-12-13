@@ -6,6 +6,7 @@ const emailService = require('../services/emailService')
 const saltRounds = 8
 
 exports.register = async (req, res) => {
+    console.log(req.body)
     try {
         const { email, password, role } = req.body
     
@@ -19,7 +20,7 @@ exports.register = async (req, res) => {
         const newUser = new User({ email, password: hashedPassword, role })
         await newUser.save()
     
-        const token = jwt.sign({ userId: newUser._id, role: newUser.role }, 'tu_secreto_secreto', { expiresIn: '1h' })
+        const token = jwt.sign({ userId: newUser._id, role: newUser.role }, 'firmaTokenVX', { expiresIn: '1h' })
     
         res.json({ token })
     } catch (error) {
@@ -30,8 +31,27 @@ exports.register = async (req, res) => {
 
 
 exports.login = async (req, res) => {
-  // logica de inicio de session
-}
+    try {
+      const { email, password } = req.body
+  
+      const user = await User.findOne({ email })
+      if (!user) {
+        return res.status(401).json({ error: 'Credenciales inválidas.' })
+      }
+  
+      const isPasswordMatch = await bcrypt.compare(password, user.password)
+      if (!isPasswordMatch) {
+        return res.status(401).json({ error: 'Credenciales inválidas.' })
+      }
+  
+      const token = jwt.sign({ userId: user._id, role: user.role }, 'firmaTokenVX', { expiresIn: '1h' })
+  
+      res.json({ token })
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ error: 'Error en el servidor.' })
+    }
+  }
 
 exports.forgotPassword = async (req, res) => {
   // logica de recuperacion de pass
