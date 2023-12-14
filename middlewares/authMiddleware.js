@@ -13,6 +13,9 @@ exports.authMiddleware = (req, res, next) => {
         if (decoded.role !== 'admin') {
             return res.status(403).json({ error: 'Acceso prohibido. Rol no autorizado.' })
         }
+
+        //para poner doctores?
+        //quizas para remover token en el logout?
   
         req.user = decoded
   

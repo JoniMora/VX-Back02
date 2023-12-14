@@ -1,16 +1,12 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
-  email: String,
-  password: String,
-  role: { type: String, enum: ['admin', 'patient'] },
+    email: String,
+    password: String,
+    role: { type: String, enum: ["admin", "patient"] },
 })
 
-module.exports = mongoose.model('User', userSchema)
-
-
-
-
+module.exports = mongoose.model("User", userSchema)
 
 // const mongoose = require('mongoose')
 // const validator = require('validator')
