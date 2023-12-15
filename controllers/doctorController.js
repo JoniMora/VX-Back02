@@ -2,7 +2,7 @@ const Doctor = require('../models/doctor')
 
 exports.getAllDoctors = async (req, res) => {
     try {
-        const doctors = await Doctor.find()
+        const doctors = await Doctor.find().populate('specialtyID')
         res.json(doctors)
     } catch (error) {
         console.error(error)
@@ -14,7 +14,7 @@ exports.getDoctorDetails = async (req, res) => {
     const doctorID = req.params.id
   
     try {
-        const doctor = await Doctor.findById(doctorID)
+        const doctor = await Doctor.findById(doctorID).populate('specialtyID')
         if (!doctor) {
             return res.status(404).json({ error: 'Médico no encontrado.' })
         }
@@ -28,12 +28,14 @@ exports.getDoctorDetails = async (req, res) => {
 }
   
 exports.addDoctor = async (req, res) => {
-    // ver el tema de only admin en el middleware
+    console.log(req.body)
+    const { name, specialtyID } = req.body
+    console.log(name)
+    console.log(specialtyID)
 
-    const { name, specialty } = req.body
 
     try {
-        const newDoctor = new Doctor({ name, specialty })
+        const newDoctor = new Doctor({ name, specialtyID })
         await newDoctor.save()
 
         res.json({ message: 'Médico agregado exitosamente.' })
@@ -46,11 +48,11 @@ exports.addDoctor = async (req, res) => {
   
 exports.updateDoctor = async (req, res) => {
     const doctorID = req.params.id  
-    const { name, specialty } = req.body
+    const { name, specialtyID } = req.body
 
     try {
-        const updatedDoctor = await Doctor.findByIdAndUpdate(doctorID, { name, specialty }, { new: true })
-        
+        const updatedDoctor = await Doctor.findByIdAndUpdate(doctorID, { name, specialtyID }, { new: true }).populate('specialtyID')
+
         if (!updatedDoctor) {
             return res.status(404).json({ error: 'Médico no encontrado.' })
         }
