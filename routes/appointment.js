@@ -5,5 +5,9 @@ const appointmentController = require('../controllers/appointmentController')
 
 router.post('/appointment', authMiddleware.authMiddleware, authMiddleware.isAdmin, appointmentController.createAppointment)
 router.put('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware.isAdmin, appointmentController.updateAppointment)
+router.delete('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware.isAdmin, appointmentController.deleteAppointment)
+
+router.get('/appointments', appointmentController.getAllAppointments)
+router.get('/appointment/doctor/:did', appointmentController.getAppointmentsByDoctor)
 
 module.exports = router
