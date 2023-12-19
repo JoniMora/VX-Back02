@@ -11,6 +11,11 @@ const doctorSchema = new mongoose.Schema({
         ref: 'Specialty', 
         required: true,
     },
+    
+    appointment: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Appointment'
+    }]
 })
 
 const Doctor = mongoose.model('Doctor', doctorSchema)

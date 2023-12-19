@@ -1,47 +1,98 @@
 const mongoose = require('mongoose')
 const Appointment = require('../models/appointment')
+const Doctor = require('../models/doctor')
 
 exports.createAppointment = async (req, res) => {
-     try {
-          const { doctor, dateTime } = req.body
+    try {
+        const { doctorID, date, time } = req.body
 
-          const newAppointment = new Appointment({
-               doctor,
-               dateTime,
-          })
+        const newAppointment = new Appointment({
+        doctor: doctorID,
+        date: new Date(date),
+        time: time,
+        available: true,
+        patient: []
+        })
 
-          await newAppointment.save()
-          res.status(201).json({ message: 'Turno creado exitosamente.' })
-     } catch (error) {
-          console.error(error)
-          res.status(500).json({ error: 'Error en el servidor.' })
-     }
+        const savedAppointment = await newAppointment.save()
+
+        const doctor = await Doctor.findByIdAndUpdate(
+            doctorID,
+            { $push: { turnos: savedAppointment._id } },
+            { new: true }
+        )
+
+        res.status(201).json({ success: true, appointment: savedAppointment })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ success: false, message: 'Error al crear el turno' })
+    }
 }
+
+
+// exports.createAppointment = async (req, res) => {
+//      try {
+//           const { doctor, dateTime } = req.body
+
+//           const newAppointment = new Appointment({
+//                doctor,
+//                dateTime,
+//           })
+
+//           await newAppointment.save()
+//           res.status(201).json({ message: 'Turno creado exitosamente.' })
+//      } catch (error) {
+//           console.error(error)
+//           res.status(500).json({ error: 'Error en el servidor.' })
+//      }
+// }
 
 
 exports.updateAppointment = async (req, res) => {
     try {
         const { aid } = req.params
-        const { doctor, dateTime } = req.body
- 
-        const existingAppointment = await Appointment.findById(aid)
-     
-        if (!existingAppointment) {
-            return res.status(404).json({ error: 'Turno no encontrado.' })
+        const { newDate, newTime } = req.body
+    
+        const updatedAppointment = await Appointment.findByIdAndUpdate(
+            aid,
+            { date: new Date(newDate), time: newTime },
+            { new: true }
+        )
+    
+        if (!updatedAppointment) {
+            return res.status(404).json({ success: false, message: 'Turno no encontrado' })
         }
-     
-        existingAppointment.doctor = doctor
-        existingAppointment.dateTime = dateTime
-     
-        await existingAppointment.save()
-     
-        res.json({ message: 'Turno actualizado exitosamente.' })
+    
+        res.status(200).json({ success: true, appointment: updatedAppointment })
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Error en el servidor.' })
+        res.status(500).json({ success: false, message: 'Error al actualizar el turno' })
     }
 }
 
+
+// exports.updateAppointment = async (req, res) => {
+//     try {
+//         const { aid } = req.params
+//         const { doctor, dateTime } = req.body
+ 
+//         const existingAppointment = await Appointment.findById(aid)
+     
+//         if (!existingAppointment) {
+//             return res.status(404).json({ error: 'Turno no encontrado.' })
+//         }
+     
+//         existingAppointment.doctor = doctor
+//         existingAppointment.dateTime = dateTime
+     
+//         await existingAppointment.save()
+     
+//         res.json({ message: 'Turno actualizado exitosamente.' })
+//     } catch (error) {
+//         console.error(error)
+//         res.status(500).json({ error: 'Error en el servidor.' })
+//     }
+// }
 
 exports.deleteAppointment = async (req, res) => {
     try {
@@ -49,15 +100,31 @@ exports.deleteAppointment = async (req, res) => {
 
         const deletedAppointment = await Appointment.findByIdAndDelete(aid)
         if (!deletedAppointment) {
-                return res.status(404).json({ error: 'Turno no encontrado.' })
+            return res.status(404).json({ success: false, message: 'Turno no encontrado' })
         }
-    
-        res.json({ message: 'Turno eliminado exitosamente.' })
+
+        res.status(200).json({ success: true, message: 'Turno eliminado correctamente' })
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Error en el servidor.' })
+        res.status(500).json({ success: false, message: 'Error al eliminar el turno' })
     }
 }
+
+// exports.deleteAppointment = async (req, res) => {
+//     try {
+//         const { aid } = req.params
+
+//         const deletedAppointment = await Appointment.findByIdAndDelete(aid)
+//         if (!deletedAppointment) {
+//                 return res.status(404).json({ error: 'Turno no encontrado.' })
+//         }
+    
+//         res.json({ message: 'Turno eliminado exitosamente.' })
+//     } catch (error) {
+//         console.error(error)
+//         res.status(500).json({ error: 'Error en el servidor.' })
+//     }
+// }
 
 
 exports.getAllAppointments = async (req, res) => {
@@ -97,6 +164,29 @@ exports.getAppointmentsByDoctor = async (req, res) => {
         res.json({ Doctor: did, appointments })
     } catch (error) {
         console.error('Error en getAppointmentsByDoctor:', error)
+        res.status(500).json({ error: 'Error en el servidor.' })
+    }
+}
+
+
+exports.reserveAppointment = async (req, res) => {
+    try {
+        const { aid } = req.params
+        const { userID } = req.user
+        
+        const existingAppointment = await Appointment.findById(aid)
+        
+        if (!existingAppointment) {
+            return res.status(404).json({ error: 'Turno no encontrado.' })
+        }
+        
+        existingAppointment.patient = userID
+
+        await existingAppointment.save()
+
+        res.json({ message: 'Turno reservado exitosamente.' })
+    } catch (error) {
+        console.error(error)
         res.status(500).json({ error: 'Error en el servidor.' })
     }
 }

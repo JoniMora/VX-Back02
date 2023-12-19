@@ -26,3 +26,10 @@ exports.isAdmin = (req, res, next) => {
     next()
 }
 
+exports.isPatient = (req, res, next) => {
+    if (req.user.role === 'patient') {
+        return next()
+    }
+
+    return res.status(403).json({ error: 'Acceso prohibido. Rol no autorizado.' })
+}
