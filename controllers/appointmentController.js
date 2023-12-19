@@ -140,53 +140,91 @@ exports.getAllAppointments = async (req, res) => {
       }
 } 
 
-//No funciona, verlo despues
 exports.getAppointmentsByDoctor = async (req, res) => {
     try {
-        const { did } = req.params;
-        console.log('ID del médico:', did)
+        const { did } = req.params
 
-        const appointments = await Appointment.find({ doctorID: did }).populate('doctorID')
+        const appointments = await Appointment.find({ doctor: did })
 
-        appointments.forEach(appointment => {
-            console.log('Fecha y hora:', appointment.dateTime)
-        })
-
-        // const appointments = await Appointment.find({
-        //     doctorID: did,
-        //     dateTime: { $exists: true, $ne: null } // Asegura que dateTime esté presente y no sea nulo
-        // }).sort('dateTime')
-
-        //const appointments = await Appointment.find({ doctorID: did }).populate('doctorID')
-
-        console.log('Turnos por médico:', appointments)
-
-        res.json({ Doctor: did, appointments })
+        res.status(200).json({ success: true, appointments })
     } catch (error) {
-        console.error('Error en getAppointmentsByDoctor:', error)
-        res.status(500).json({ error: 'Error en el servidor.' })
+        console.error(error)
+        res.status(500).json({ success: false, message: 'Error al obtener los turnos del médico' })
     }
 }
 
+//No funciona, verlo despues
+// exports.getAppointmentsByDoctor = async (req, res) => {
+//     try {
+//         const { did } = req.params;
+//         console.log('ID del médico:', did)
+
+//         const appointments = await Appointment.find({ doctorID: did }).populate('doctorID')
+
+//         appointments.forEach(appointment => {
+//             console.log('Fecha y hora:', appointment.dateTime)
+//         })
+
+//         // const appointments = await Appointment.find({
+//         //     doctorID: did,
+//         //     dateTime: { $exists: true, $ne: null } // Asegura que dateTime esté presente y no sea nulo
+//         // }).sort('dateTime')
+
+//         //const appointments = await Appointment.find({ doctorID: did }).populate('doctorID')
+
+//         console.log('Turnos por médico:', appointments)
+
+//         res.json({ Doctor: did, appointments })
+//     } catch (error) {
+//         console.error('Error en getAppointmentsByDoctor:', error)
+//         res.status(500).json({ error: 'Error en el servidor.' })
+//     }
+// }
 
 exports.reserveAppointment = async (req, res) => {
     try {
+        const { patientID } = req.body
         const { aid } = req.params
-        const { userID } = req.user
-        
-        const existingAppointment = await Appointment.findById(aid)
-        
-        if (!existingAppointment) {
-            return res.status(404).json({ error: 'Turno no encontrado.' })
+
+        const existingPatient = await Patient.findById(patientID)
+        if (!existingPatient) {
+            return res.status(404).json({ success: false, message: 'Paciente no encontrado' })
         }
-        
-        existingAppointment.patient = userID
 
-        await existingAppointment.save()
+        const appointment = await Appointment.findById(aid)
+        if (!appointment || !appointment.available) {
+            return res.status(404).json({ success: false, message: 'Turno no disponible' })
+        }
 
-        res.json({ message: 'Turno reservado exitosamente.' })
+        appointment.available = false
+        appointment.patient.push(patientID)
+        await appointment.save()
+
+        res.status(200).json({ success: true, message: 'Turno reservado correctamente' })
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Error en el servidor.' })
+        res.status(500).json({ success: false, message: 'Error al reservar el turno' })
     }
 }
+
+// exports.reserveAppointment = async (req, res) => {
+//     try {
+//         const { aid } = req.params
+//         const { userID } = req.user
+        
+//         const existingAppointment = await Appointment.findById(aid)
+        
+//         if (!existingAppointment) {
+//             return res.status(404).json({ error: 'Turno no encontrado.' })
+//         }
+        
+//         existingAppointment.patient = userID
+
+//         await existingAppointment.save()
+
+//         res.json({ message: 'Turno reservado exitosamente.' })
+//     } catch (error) {
+//         console.error(error)
+//         res.status(500).json({ error: 'Error en el servidor.' })
+//     }
+// }
