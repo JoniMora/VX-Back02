@@ -9,7 +9,10 @@ router.delete('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware
 
 router.get('/appointments', appointmentController.getAllAppointments)
 router.get('/appointment/doctor/:did', appointmentController.getAppointmentsByDoctor)
+router.get('/appointment/patient/:pid', appointmentController.getAppointmentsByPatient)
+
 
 router.post('/appointment/:aid/reserve', authMiddleware.authMiddleware, authMiddleware.isPatient, appointmentController.reserveAppointment)
+router.post('/appointment/:aid/cancel', authMiddleware.authMiddleware, authMiddleware.isPatient, appointmentController.cancelAppointment)
 
 module.exports = router

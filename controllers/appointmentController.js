@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Appointment = require('../models/appointment')
 const Doctor = require('../models/doctor')
+const User = require('../models/user')
 
 exports.createAppointment = async (req, res) => {
     try {
@@ -29,25 +30,6 @@ exports.createAppointment = async (req, res) => {
     }
 }
 
-
-// exports.createAppointment = async (req, res) => {
-//      try {
-//           const { doctor, dateTime } = req.body
-
-//           const newAppointment = new Appointment({
-//                doctor,
-//                dateTime,
-//           })
-
-//           await newAppointment.save()
-//           res.status(201).json({ message: 'Turno creado exitosamente.' })
-//      } catch (error) {
-//           console.error(error)
-//           res.status(500).json({ error: 'Error en el servidor.' })
-//      }
-// }
-
-
 exports.updateAppointment = async (req, res) => {
     try {
         const { aid } = req.params
@@ -70,30 +52,6 @@ exports.updateAppointment = async (req, res) => {
     }
 }
 
-
-// exports.updateAppointment = async (req, res) => {
-//     try {
-//         const { aid } = req.params
-//         const { doctor, dateTime } = req.body
- 
-//         const existingAppointment = await Appointment.findById(aid)
-     
-//         if (!existingAppointment) {
-//             return res.status(404).json({ error: 'Turno no encontrado.' })
-//         }
-     
-//         existingAppointment.doctor = doctor
-//         existingAppointment.dateTime = dateTime
-     
-//         await existingAppointment.save()
-     
-//         res.json({ message: 'Turno actualizado exitosamente.' })
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ error: 'Error en el servidor.' })
-//     }
-// }
-
 exports.deleteAppointment = async (req, res) => {
     try {
         const { aid } = req.params
@@ -109,23 +67,6 @@ exports.deleteAppointment = async (req, res) => {
         res.status(500).json({ success: false, message: 'Error al eliminar el turno' })
     }
 }
-
-// exports.deleteAppointment = async (req, res) => {
-//     try {
-//         const { aid } = req.params
-
-//         const deletedAppointment = await Appointment.findByIdAndDelete(aid)
-//         if (!deletedAppointment) {
-//                 return res.status(404).json({ error: 'Turno no encontrado.' })
-//         }
-    
-//         res.json({ message: 'Turno eliminado exitosamente.' })
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ error: 'Error en el servidor.' })
-//     }
-// }
-
 
 exports.getAllAppointments = async (req, res) => {
       try {
@@ -153,41 +94,13 @@ exports.getAppointmentsByDoctor = async (req, res) => {
     }
 }
 
-//No funciona, verlo despues
-// exports.getAppointmentsByDoctor = async (req, res) => {
-//     try {
-//         const { did } = req.params;
-//         console.log('ID del médico:', did)
-
-//         const appointments = await Appointment.find({ doctorID: did }).populate('doctorID')
-
-//         appointments.forEach(appointment => {
-//             console.log('Fecha y hora:', appointment.dateTime)
-//         })
-
-//         // const appointments = await Appointment.find({
-//         //     doctorID: did,
-//         //     dateTime: { $exists: true, $ne: null } // Asegura que dateTime esté presente y no sea nulo
-//         // }).sort('dateTime')
-
-//         //const appointments = await Appointment.find({ doctorID: did }).populate('doctorID')
-
-//         console.log('Turnos por médico:', appointments)
-
-//         res.json({ Doctor: did, appointments })
-//     } catch (error) {
-//         console.error('Error en getAppointmentsByDoctor:', error)
-//         res.status(500).json({ error: 'Error en el servidor.' })
-//     }
-// }
-
 exports.reserveAppointment = async (req, res) => {
     try {
         const { patientID } = req.body
         const { aid } = req.params
 
-        const existingPatient = await Patient.findById(patientID)
-        if (!existingPatient) {
+        const existingPatient = await User.findById(patientID)
+        if (!existingPatient || existingPatient.role !== 'patient') {
             return res.status(404).json({ success: false, message: 'Paciente no encontrado' })
         }
 
@@ -207,24 +120,46 @@ exports.reserveAppointment = async (req, res) => {
     }
 }
 
-// exports.reserveAppointment = async (req, res) => {
-//     try {
-//         const { aid } = req.params
-//         const { userID } = req.user
-        
-//         const existingAppointment = await Appointment.findById(aid)
-        
-//         if (!existingAppointment) {
-//             return res.status(404).json({ error: 'Turno no encontrado.' })
-//         }
-        
-//         existingAppointment.patient = userID
+exports.cancelAppointment = async (req, res) => {
+    try {
+        const { patientID } = req.body
+        const { aid } = req.params
+    
+        const existingPatient = await User.findById(patientID)
+        if (!existingPatient || existingPatient.role !== 'patient') {
+            return res.status(404).json({ success: false, message: 'Paciente no encontrado' })
+        }
+    
+        const appointment = await Appointment.findById(aid);
+        if (!appointment || (appointment.available && appointment.patient.length === 0)) {
+            return res.status(404).json({ success: false, message: 'Turno no encontrado o ya cancelado' })
+        }
 
-//         await existingAppointment.save()
+        appointment.available = true
+        appointment.patient = []
+        await appointment.save()
+  
+        res.status(200).json({ success: true, message: 'Turno cancelado correctamente' })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ success: false, message: 'Error al cancelar el turno' })
+    }
+}
 
-//         res.json({ message: 'Turno reservado exitosamente.' })
-//     } catch (error) {
-//         console.error(error)
-//         res.status(500).json({ error: 'Error en el servidor.' })
-//     }
-// }
+exports.getAppointmentsByPatient = async (req, res) => {
+    try {
+        const { pid } = req.params
+    
+        const existingPatient = await User.findById(pid)
+        if (!existingPatient || existingPatient.role !== 'patient') {
+            return res.status(404).json({ success: false, message: 'Paciente no encontrado' })
+        }
+  
+        const appointments = await Appointment.find({ patient: pid })
+  
+        res.status(200).json({ success: true, appointments })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ success: false, message: 'Error al obtener los turnos del paciente' })
+    }
+  }
