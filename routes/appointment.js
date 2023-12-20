@@ -15,4 +15,6 @@ router.get('/appointment/patient/:pid', appointmentController.getAppointmentsByP
 router.post('/appointment/:aid/reserve', authMiddleware.authMiddleware, authMiddleware.isPatient, appointmentController.reserveAppointment)
 router.post('/appointment/:aid/cancel', authMiddleware.authMiddleware, authMiddleware.isPatient, appointmentController.cancelAppointment)
 
+router.get('/appointment/cancellation-history/:pid', appointmentController.getCancellationHistoryByPatient)
+
 module.exports = router

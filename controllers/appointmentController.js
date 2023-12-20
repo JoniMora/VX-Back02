@@ -94,58 +94,6 @@ exports.getAppointmentsByDoctor = async (req, res) => {
     }
 }
 
-exports.reserveAppointment = async (req, res) => {
-    try {
-        const { patientID } = req.body
-        const { aid } = req.params
-
-        const existingPatient = await User.findById(patientID)
-        if (!existingPatient || existingPatient.role !== 'patient') {
-            return res.status(404).json({ success: false, message: 'Paciente no encontrado' })
-        }
-
-        const appointment = await Appointment.findById(aid)
-        if (!appointment || !appointment.available) {
-            return res.status(404).json({ success: false, message: 'Turno no disponible' })
-        }
-
-        appointment.available = false
-        appointment.patient.push(patientID)
-        await appointment.save()
-
-        res.status(200).json({ success: true, message: 'Turno reservado correctamente' })
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({ success: false, message: 'Error al reservar el turno' })
-    }
-}
-
-exports.cancelAppointment = async (req, res) => {
-    try {
-        const { patientID } = req.body
-        const { aid } = req.params
-    
-        const existingPatient = await User.findById(patientID)
-        if (!existingPatient || existingPatient.role !== 'patient') {
-            return res.status(404).json({ success: false, message: 'Paciente no encontrado' })
-        }
-    
-        const appointment = await Appointment.findById(aid);
-        if (!appointment || (appointment.available && appointment.patient.length === 0)) {
-            return res.status(404).json({ success: false, message: 'Turno no encontrado o ya cancelado' })
-        }
-
-        appointment.available = true
-        appointment.patient = []
-        await appointment.save()
-  
-        res.status(200).json({ success: true, message: 'Turno cancelado correctamente' })
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({ success: false, message: 'Error al cancelar el turno' })
-    }
-}
-
 exports.getAppointmentsByPatient = async (req, res) => {
     try {
         const { pid } = req.params
@@ -162,4 +110,84 @@ exports.getAppointmentsByPatient = async (req, res) => {
         console.error(error)
         res.status(500).json({ success: false, message: 'Error al obtener los turnos del paciente' })
     }
-  }
+}
+
+exports.reserveAppointment = async (req, res) => {
+    try {
+        const { patientID } = req.body
+        const { aid } = req.params
+
+        const existingPatient = await User.findById(patientID)
+        if (!existingPatient || existingPatient.role !== 'patient') {
+            return res.status(404).json({ success: false, message: 'Paciente no encontrado' })
+        }
+
+        const appointment = await Appointment.findById(aid)
+        if (!appointment || !appointment.available) {
+            return res.status(404).json({ success: false, message: 'Turno no disponible' })
+        }
+
+        appointment.available = false
+        appointment.patient = patientID
+        await appointment.save()
+
+        res.status(200).json({ success: true, message: 'Turno reservado correctamente' })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ success: false, message: 'Error al reservar el turno' })
+    }
+}
+
+exports.cancelAppointment = async (req, res) => {
+    try {
+        const { patientID } = req.body
+        const { aid } = req.params
+
+        const existingPatient = await User.findById(patientID)
+        if (!existingPatient || existingPatient.role !== 'patient') {
+            return res.status(404).json({ success: false, message: 'Paciente no encontrado' })
+        }
+
+        const appointment = await Appointment.findById(aid)
+        if (!appointment || appointment.available || !appointment.patient.equals(patientID)) {
+            return res.status(404).json({ success: false, message: 'Turno no encontrado o no asociado al paciente' })
+        }
+
+        appointment.available = true
+        appointment.patient = null
+        appointment.cancellationHistory.push({ cancellationDate: new Date() })
+        await appointment.save()
+
+        res.status(200).json({ success: true, message: 'Turno cancelado correctamente' })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ success: false, message: 'Error al cancelar el turno' })
+    }
+}
+
+exports.getCancellationHistoryByPatient = async (req, res) => {
+    try {
+        const { pid } = req.params
+
+        const existingPatient = await User.findById(pid)
+        if (!existingPatient || existingPatient.role !== 'patient') {
+            return res.status(404).json({ success: false, message: 'Paciente no encontrado' })
+        }
+
+        const cancellationHistory = await Appointment.find({
+            $or: [
+                { patient: pid, 'cancellationHistory.0': { $exists: true } },
+                { patient: null, 'cancellationHistory.0': { $exists: true } }
+            ]
+        })
+    
+        if (cancellationHistory.length === 0) {
+            return res.status(404).json({ success: false, message: 'No se encontraron turnos cancelados por el paciente' })
+        }
+    
+        res.status(200).json({ success: true, cancellationHistory: cancellationHistory[0].cancellationHistory })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ success: false, message: 'Error al obtener el historial de cancelaciones del paciente' })
+    }
+}

@@ -18,9 +18,15 @@ const appointmentSchema = new mongoose.Schema({
           type: Boolean,
           default: true
      },
-     patient: [{
+     patient: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Patient'
+     },
+     cancellationHistory: [{
+          cancellationDate: {
+              type: Date,
+              default: Date.now
+          }
      }]
 })
 
