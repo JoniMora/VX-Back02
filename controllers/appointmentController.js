@@ -5,14 +5,14 @@ const User = require('../models/user')
 
 exports.createAppointment = async (req, res) => {
     try {
-        const { doctorID, date, time } = req.body
+        const { doctorID, date, time, patientID } = req.body
 
         const newAppointment = new Appointment({
-        doctor: doctorID,
-        date: new Date(date),
-        time: time,
-        available: true,
-        patient: []
+            doctor: doctorID,
+            date: new Date(date),
+            time: time,
+            available: true,
+            patient: patientID,
         })
 
         const savedAppointment = await newAppointment.save()

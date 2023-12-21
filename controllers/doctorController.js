@@ -1,4 +1,5 @@
 const Doctor = require('../models/doctor')
+const Appointment = require('../models/appointment')
 
 exports.getAllDoctors = async (req, res) => {
     try {
@@ -12,14 +13,33 @@ exports.getAllDoctors = async (req, res) => {
   
 exports.getDoctorDetails = async (req, res) => {
     const doctorID = req.params.id
-  
+
+    console.log('Doctor ID:', doctorID)
     try {
-        const doctor = await Doctor.findById(doctorID).populate('specialtyID')
+        const doctor = await Doctor.findById(doctorID).populate('specialtyID').populate('appointment')
+        
         if (!doctor) {
             return res.status(404).json({ error: 'Médico no encontrado.' })
         }
-  
-        // Logica para obtener turnos??
+
+        const availableAppointments = await Appointment.find({
+            doctor: doctorID,
+            available: true,
+        })
+
+        console.log('Turnos Disponibles:', availableAppointments)
+
+        // const formattedAppointments = availableAppointments.map(appointment => ({
+        //     date: appointment.date,
+        //     time: appointment.time,
+        // }))
+
+        //doctor.appointment = formattedAppointments
+
+        doctor.appointment = availableAppointments
+        
+        await doctor.save()
+
         res.json(doctor)
     } catch (error) {
         console.error(error)
@@ -28,11 +48,7 @@ exports.getDoctorDetails = async (req, res) => {
 }
   
 exports.addDoctor = async (req, res) => {
-    console.log(req.body)
     const { name, specialtyID } = req.body
-    console.log(name)
-    console.log(specialtyID)
-
 
     try {
         const newDoctor = new Doctor({ name, specialtyID })
