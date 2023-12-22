@@ -64,15 +64,61 @@ exports.forgotPassword = async (req, res) => {
         }
 
         const recoveryToken = uuidv4()
+        const expirationDate = new Date()
+        expirationDate.setMinutes(expirationDate.getMinutes() + 5)
 
-        user.passwordRecoveryToken = recoveryToken
+        user.passwordRecovery = {
+            token: recoveryToken,
+            expiration: expirationDate
+        }
+
         await user.save()
 
         const recoveryLink = `https://dominioDevMora.com/reset-password/${recoveryToken}`
-        
+
         await emailService.sendPasswordRecoveryEmail(user.email, recoveryLink)
-        
+
         res.status(200).json({ success: true, message: 'Correo electrónico de recuperación enviado' })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ success: false, message: 'Error en el servidor' })
+    }
+}
+
+
+exports.resetPassword = async (req, res) => {
+    //INTENTO 4
+    console.log('req.body:', req.body)
+    const { recoveryToken } = req.params
+    const { newPassword } = req.body
+
+    try {
+        const user = await User.findOne({ 'passwordRecovery.token': recoveryToken })
+        console.log('Token ENTRADA: ', user.passwordRecovery.token)
+
+        if (!user || !user.passwordRecovery || user.passwordRecovery.token === undefined || user.passwordRecovery.token === null) {
+            return res.status(404).json({ success: false, message: 'Token de recuperación inválido' })
+        }
+        
+
+        if (user.passwordRecovery.expiration < new Date()) {
+            return res.status(400).json({ success: false, message: 'El token de recuperación ha expirado' })
+        }
+
+        console.log('Antes de la actualización:', user)
+        console.log('Token Antes: ', user.passwordRecovery.token)
+
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds)
+
+        user.password = hashedPassword
+        user.passwordRecovery.token = undefined
+        user.passwordRecovery.expiration = undefined
+        await user.save()
+
+        console.log('Después de la actualización:', user)
+        console.log('Token Despues: ', user.passwordRecovery.token)
+
+        res.status(200).json({ success: true, message: 'Contraseña cambiada exitosamente' })
     } catch (error) {
         console.error(error)
         res.status(500).json({ success: false, message: 'Error en el servidor' })

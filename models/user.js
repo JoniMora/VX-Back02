@@ -4,6 +4,10 @@ const userSchema = new mongoose.Schema({
     email: String,
     password: String,
     role: { type: String, enum: ["admin", "patient"] },
+    passwordRecovery: {
+        token: String,
+        expiration: Date
+    }
 })
 
 module.exports = mongoose.model("User", userSchema)
