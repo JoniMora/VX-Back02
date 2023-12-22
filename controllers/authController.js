@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { v4: uuidv4 } = require('uuid')
 const emailService = require('../services/emailService')
 
 const saltRounds = 8
@@ -53,5 +54,27 @@ exports.login = async (req, res) => {
 }
 
 exports.forgotPassword = async (req, res) => {
-  // logica de recuperacion de pass
+    const { email } = req.body
+
+    try {
+        const user = await User.findOne({ email })
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Usuario no encontrado' })
+        }
+
+        const recoveryToken = uuidv4()
+
+        user.passwordRecoveryToken = recoveryToken
+        await user.save()
+
+        const recoveryLink = `https://dominioDevMora.com/reset-password/${recoveryToken}`
+        
+        await emailService.sendPasswordRecoveryEmail(user.email, recoveryLink)
+        
+        res.status(200).json({ success: true, message: 'Correo electrónico de recuperación enviado' })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ success: false, message: 'Error en el servidor' })
+    }
 }
