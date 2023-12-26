@@ -1,0 +1,566 @@
+{
+	"info": {
+		"_postman_id": "d1e3c9a0-6073-4420-96b2-deb603b8be1d",
+		"name": "VX-02-Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20984909"
+	},
+	"item": [
+		{
+			"name": "Post Register User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"patient5@test.com\",\n  \"password\": \"abc12345\",\n  \"role\": \"patient\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Login User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"patient2@test.com\",\n  \"password\": \"abc12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Forgot Password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"patient1@test.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/forgot-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Reset Password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"newPassword\": \"abc12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/reset-password/23590f66-d820-4486-b20a-eea7b6411b1c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"reset-password",
+						"23590f66-d820-4486-b20a-eea7b6411b1c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Specialties",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTc5ZGRkYjhjYzU1YjI2ZDI0MGRiYWEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDI1ODcxMDUsImV4cCI6MTcwMjU5MDcwNX0.i5pLYDZ05jx5b5jXGfs4wJgueIvuD2TSVekwHen8K6g",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Dermatology\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/specialties",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"specialties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Specialties",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/specialties",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"specialties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Doctor",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTg3NTgzYWRmYTUwNmMwOWMzMzFhZWEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDM1MjQ5MzUsImV4cCI6MTcwMzUyODUzNX0.J9PpA-vN-2T8I-_sxK4_AWRcZ4Pd5ZaiMOVOqQJyWBA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Doc3\",\n  \"specialtyID\": \"657b6b284e782b8c8f2123a1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/doctor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"doctor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Doctors",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/doctors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"doctors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Doctor ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/doctor/6589babbebd7746b357f29b4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"doctor",
+						"6589babbebd7746b357f29b4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put Doctor ID",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTg3NTgzYWRmYTUwNmMwOWMzMzFhZWEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDM1NDIwMDMsImV4cCI6MTcwMzU0NTYwM30.LSGzLjf4xmZ3X0-U_K_NuLeGG8le4AbqJyHHazMqof8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Doc1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/doctor/6589babbebd7746b357f29b4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"doctor",
+						"6589babbebd7746b357f29b4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Appointment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTg3NTgzYWRmYTUwNmMwOWMzMzFhZWEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDM1NjA2NjMsImV4cCI6MTcwMzU2NDI2M30.P8vOyuQ61pcSOrn--3OPg7f8M96UZSQxZocZ4cIr7ug",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"doctorID\": \"6589baceebd7746b357f29b8\",\n  \"date\": \"2023-12-26\",\n  \"time\": \"12:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/appointment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"appointment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put Appointment",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTc5ZGRkYjhjYzU1YjI2ZDI0MGRiYWEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDI5OTU2MTksImV4cCI6MTcwMjk5OTIxOX0._NAuSxbqkDNr3T0an6IOaEXGVEMNsrYS5-1roYCZrvE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"newDate\": \"2023-12-20\",\n    \"newTime\": \"10:30\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/appointment/6581a78022dc05fe75fe373c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"appointment",
+						"6581a78022dc05fe75fe373c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Appointment",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTc5ZGRkYjhjYzU1YjI2ZDI0MGRiYWEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDI5OTU2MTksImV4cCI6MTcwMjk5OTIxOX0._NAuSxbqkDNr3T0an6IOaEXGVEMNsrYS5-1roYCZrvE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/appointment/6581a78022dc05fe75fe373c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"appointment",
+						"6581a78022dc05fe75fe373c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Appointment",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/appointments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Appointment by Doctor",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTc5ZGRkYjhjYzU1YjI2ZDI0MGRiYWEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDI5MDY5MTUsImV4cCI6MTcwMjkxMDUxNX0.TEorpQoLOKxDVW7uDH3PoTgLiQQ_hw7vr-AzbWw1Eoc",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/appointment/doctor/6589babbebd7746b357f29b4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"appointment",
+						"doctor",
+						"6589babbebd7746b357f29b4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Appointment by Patient",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/appointment/patient/6588be7d8fa4b851e4165d47",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"appointment",
+						"patient",
+						"6588be7d8fa4b851e4165d47"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Reserve an Appointment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTg4YmU4NDhmYTRiODUxZTQxNjVkNGEiLCJyb2xlIjoicGF0aWVudCIsImlhdCI6MTcwMzU2MDk0NCwiZXhwIjoxNzAzNTY0NTQ0fQ.dhj5VdXMDGfL5UAnX3cb95EP2XuJf_S_I0xd56f3_9k",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"patientID\": \"6588be7d8fa4b851e4165d47\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/appointment/658a464471e73476e218b05c/reserve",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"appointment",
+						"658a464471e73476e218b05c",
+						"reserve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Cancel an Appointment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTg4YmU4NDhmYTRiODUxZTQxNjVkNGEiLCJyb2xlIjoicGF0aWVudCIsImlhdCI6MTcwMzU2MDk0NCwiZXhwIjoxNzAzNTY0NTQ0fQ.dhj5VdXMDGfL5UAnX3cb95EP2XuJf_S_I0xd56f3_9k",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"patientID\": \"6588be7d8fa4b851e4165d47\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/appointment/658a461c71e73476e218b050/cancel",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"appointment",
+						"658a461c71e73476e218b050",
+						"cancel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Appointment Cancellation History",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/appointment/cancellation-history/65875814dfa506c09c331a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"appointment",
+						"cancellation-history",
+						"65875814dfa506c09c331a"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
