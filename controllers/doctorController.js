@@ -4,22 +4,21 @@ const Appointment = require('../models/appointment')
 exports.getAllDoctors = async (req, res) => {
     try {
         const doctors = await Doctor.find().populate('specialtyID')
-        res.json(doctors)
+
+        res.status(200).json({success: true, data: doctors})
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Error en el servidor.' })
+        res.status(500).json({success: false, error: 'Server error.'})
     }
 }
   
 exports.getDoctorDetails = async (req, res) => {
     const doctorID = req.params.id
 
-    console.log('Doctor ID:', doctorID)
     try {
         const doctor = await Doctor.findById(doctorID).populate('specialtyID').populate('appointment')
-        
         if (!doctor) {
-            return res.status(404).json({ error: 'Médico no encontrado.' })
+            return res.status(404).json({success: false, error: 'Doctor not found.'})
         }
 
         const availableAppointments = await Appointment.find({
@@ -27,55 +26,44 @@ exports.getDoctorDetails = async (req, res) => {
             available: true,
         })
 
-        console.log('Turnos Disponibles:', availableAppointments)
-
-        // const formattedAppointments = availableAppointments.map(appointment => ({
-        //     date: appointment.date,
-        //     time: appointment.time,
-        // }))
-
-        //doctor.appointment = formattedAppointments
-
         doctor.appointment = availableAppointments
-        
         await doctor.save()
 
-        res.json(doctor)
+        res.status(200).json({success: true, data: doctor})
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Error en el servidor.' })
+        res.status(500).json({success: false, error: 'Server error.'})
     }
 }
   
 exports.addDoctor = async (req, res) => {
-    const { name, specialtyID } = req.body
+    const {name, specialtyID} = req.body
 
     try {
-        const newDoctor = new Doctor({ name, specialtyID })
+        const newDoctor = new Doctor({name, specialtyID})
         await newDoctor.save()
 
-        res.json({ message: 'Médico agregado exitosamente.' })
+        res.status(200).json({success: true, message: 'Doctor successfully added.' })
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Error en el servidor.' })
+        res.status(500).json({success: false, error: 'Server error.'})
     }
 }
 
   
 exports.updateDoctor = async (req, res) => {
     const doctorID = req.params.id  
-    const { name, specialtyID } = req.body
+    const {name, specialtyID} = req.body
 
     try {
-        const updatedDoctor = await Doctor.findByIdAndUpdate(doctorID, { name, specialtyID }, { new: true }).populate('specialtyID')
-
+        const updatedDoctor = await Doctor.findByIdAndUpdate(doctorID, {name, specialtyID}, {new: true}).populate('specialtyID')
         if (!updatedDoctor) {
-            return res.status(404).json({ error: 'Médico no encontrado.' })
+            return res.status(404).json({success: false, error: 'Doctor not found.'})
         }
 
-        res.json({ message: 'Información del médico actualizada exitosamente.' })
+        res.status(200).json({success: true, message: 'Doctor information updated successfully.' })
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Error en el servidor.' })
+        res.status(500).json({success: false, error: 'Server error.'})
     }
 }

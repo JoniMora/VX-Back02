@@ -24,8 +24,6 @@ const sendPasswordRecoveryEmail = async (userEmail, recoveryLink) => {
     }
 
     const result = await transporter.sendMail(mailOptions)
-    console.log('Correo electrónico enviado:', result)
-
     return result
 }
 

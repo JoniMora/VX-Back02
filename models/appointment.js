@@ -26,8 +26,15 @@ const appointmentSchema = new mongoose.Schema({
           cancellationDate: {
               type: Date,
               default: Date.now
+          },
+          canceledByPatient: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'Patient'
+          },
+          canceledAppointmentTime: {
+              type: String
           }
-     }]
+      }]
 })
 
 const Appointment = mongoose.model('Appointment', appointmentSchema)
