@@ -2,21 +2,21 @@ const nodemailer = require('nodemailer')
 
 const sendPasswordRecoveryEmail = async (userEmail, recoveryLink) => {
     const transporter = nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 2525,
-        // service: 'Gmail',
+        // host: "sandbox.smtp.mailtrap.io",
+        // port: 2525,
+        service: 'Gmail',
         auth: {
-            user: process.env.MAILTRAP_USER,
-            pass: process.env.MAILTRAP_PASS,
+            // user: process.env.MAILTRAP_USER,
+            // pass: process.env.MAILTRAP_PASS,
 
-            // user: process.env.GMAIL_USER,
-            // pass: process.env.GMAIL_PASSWORD,
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASSWORD,
         },
     })
 
     const mailOptions = {
-        from: `Developer Mora ${process.env.MAILTRAP_USER}`,
-        //from: `Developer Mora ${process.env.GMAIL_USER}`,
+        //from: `Developer Mora ${process.env.MAILTRAP_USER}`,
+        from: `Developer Mora ${process.env.GMAIL_USER}`,
         
         to: userEmail,
         subject: 'Recuperación de contraseña',
