@@ -12,35 +12,35 @@ const appointmentController = require('../controllers/appointmentController')
  *       properties:
  *         _id:
  *           type: string
- *           description: Identificador único de la cita.
+ *           description: Unique identifier for the appointment.
  *         doctor:
  *           type: object
  *           properties:
  *             _id:
  *               type: string
- *               description: Identificador único del doctor asociado a la cita.
+ *               description: Unique identifier of the doctor associated with the appointment.
  *             name:
  *               type: string
- *               description: Nombre del doctor.
+ *               description: Name of the doctor.
  *         date:
  *           type: string
  *           format: date
- *           description: Fecha de la cita.
+ *           description: Date of the appointment.
  *         time:
  *           type: string
- *           description: Hora de la cita.
+ *           description: Time of the appointment.
  *         available:
  *           type: boolean
- *           description: Indica si la cita está disponible.
+ *           description: Indicates if the appointment is available.
  *         patient:
  *           type: object
  *           properties:
  *             _id:
  *               type: string
- *               description: Identificador único del paciente asociado a la cita.
+ *               description: Unique identifier of the patient associated with the appointment.
  *             name:
  *               type: string
- *               description: Nombre del paciente.
+ *               description: Name of the patient.
  *         cancellationHistory:
  *           type: array
  *           items:
@@ -49,13 +49,13 @@ const appointmentController = require('../controllers/appointmentController')
  *               cancellationDate:
  *                 type: string
  *                 format: date-time
- *                 description: Fecha y hora de la cancelación.
+ *                 description: Date and time of the cancellation.
  *               canceledByPatient:
  *                 type: string
- *                 description: Identificador único del paciente que canceló la cita.
+ *                 description: Unique identifier of the patient who canceled the appointment.
  *               canceledAppointmentTime:
  *                 type: string
- *                 description: Hora de la cita cancelada.
+ *                 description: Time of the canceled appointment.
  */
 
 /**
@@ -68,29 +68,29 @@ const appointmentController = require('../controllers/appointmentController')
  *         cancellationDate:
  *           type: string
  *           format: date-time
- *           description: Fecha y hora de la cancelación.
+ *           description: Date and time of the cancellation.
  *         canceledByPatient:
  *           type: string
- *           description: Identificador único del paciente que canceló la cita.
+ *           description: Unique identifier of the patient who canceled the appointment.
  *         canceledAppointmentTime:
  *           type: string
- *           description: Hora de la cita cancelada en formato 'HH:mm'.
+ *           description: Time of the canceled appointment in 'HH:mm' format.
  */
 
 /**
  * @swagger
  * /appointments:
  *   post:
- *     summary: Crear una nueva cita
- *     description: Crea una nueva cita en el sistema. Se requiere autenticación de administrador.
+ *     summary: Create a new appointment
+ *     description: Creates a new appointment in the system. Administrator authentication is required.
  *     tags: [Appointments]
  *     security:
- *       - bearerAuth: []  # Usa el token de autenticación (Admin) como parte del encabezado 
+ *       - bearerAuth: []  # Uses the authentication token (Admin) as part of the header
  *     parameters:
  *       - in: header
  *         name: Authorization
  *         required: true
- *         description: Token de autenticación del admin.
+ *         description: Admin authentication token.
  *         schema:
  *           type: string
  *           format: JWT
@@ -103,20 +103,20 @@ const appointmentController = require('../controllers/appointmentController')
  *             properties:
  *               doctorID:
  *                 type: string
- *                 description: Identificador único del doctor asociado a la cita.
+ *                 description: Unique identifier of the doctor associated with the appointment.
  *               date:
  *                 type: string
  *                 format: date
- *                 description: Fecha de la cita en formato 'YYYY-MM-DD'.
+ *                 description: Date of the appointment in 'YYYY-MM-DD' format.
  *               time:
  *                 type: string
- *                 description: Hora de la cita en formato 'HH:mm'.
+ *                 description: Time of the appointment in 'HH:mm' format.
  *               patientID:
  *                 type: string
- *                 description: (Opcional) Identificador único del paciente asociado a la cita si está reservada.
+ *                 description: (Optional) Unique identifier of the patient associated with the appointment if it's reserved.
  *     responses:
  *       '201':
- *         description: Cita creada con éxito.
+ *         description: Appointment created successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -124,30 +124,30 @@ const appointmentController = require('../controllers/appointmentController')
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 appointment:
  *                   type: object
  *                   properties:
  *                     doctor:
  *                       type: string
- *                       description: Identificador único del doctor asociado a la cita.
+ *                       description: Unique identifier of the doctor associated with the appointment.
  *                     date:
  *                       type: string
- *                       description: Fecha de la cita en formato 'YYYY-MM-DD'.
+ *                       description: Date of the appointment in 'YYYY-MM-DD' format.
  *                     time:
  *                       type: string
- *                       description: Hora de la cita en formato 'HH:mm'.
+ *                       description: Time of the appointment in 'HH:mm' format.
  *                     available:
  *                       type: boolean
- *                       description: Indica si la cita está disponible.
+ *                       description: Indicates if the appointment is available.
  *                     _id:
  *                       type: string
- *                       description: Identificador único de la cita.
+ *                       description: Unique identifier of the appointment.
  *                     cancellationHistory:
  *                       type: array
  *                       items: []
  *       '400':
- *         description: Error en la solicitud. Verifica los detalles en el mensaje de error.
+ *         description: Request error. Check the details in the error message.
  *         content:
  *           application/json:
  *             schema:
@@ -155,12 +155,12 @@ const appointmentController = require('../controllers/appointmentController')
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *       '401':
- *         description: No autorizado. Se requiere un token de administrador válido.
+ *         description: Unauthorized. A valid administrator token is required.
  *         content:
  *           application/json:
  *             schema:
@@ -168,12 +168,12 @@ const appointmentController = require('../controllers/appointmentController')
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *       '500':
- *         description: Error del servidor. Consulta los logs para más detalles.
+ *         description: Server error. Check the logs for more details.
  *         content:
  *           application/json:
  *             schema:
@@ -181,10 +181,10 @@ const appointmentController = require('../controllers/appointmentController')
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
 */
 router.post('/appointment', authMiddleware.authMiddleware, authMiddleware.isAdmin, appointmentController.createAppointment)
 
@@ -192,22 +192,22 @@ router.post('/appointment', authMiddleware.authMiddleware, authMiddleware.isAdmi
  * @swagger
  * /appointment/{aid}:
  *   put:
- *     summary: Actualizar una cita existente
- *     description: Actualiza los detalles de una cita existente en el sistema. Se requiere autenticación de administrador.
+ *     summary: Update an existing appointment
+ *     description: Updates the details of an existing appointment in the system. Administrator authentication is required.
  *     tags: [Appointments]
  *     security:
- *       - bearerAuth: []  # Usa el token de autenticación (Admin) como parte del encabezado
+ *       - bearerAuth: []  # Uses the authentication token (Admin) as part of the header
  *     parameters:
  *       - in: path
  *         name: aid
  *         required: true
- *         description: Identificador único de la cita que se actualizará.
+ *         description: Unique identifier of the appointment to be updated.
  *         schema:
  *           type: string
  *       - in: header
  *         name: Authorization
  *         required: true
- *         description: Token de autenticación del admin.
+ *         description: Admin authentication token.
  *         schema:
  *           type: string
  *           format: JWT
@@ -221,13 +221,13 @@ router.post('/appointment', authMiddleware.authMiddleware, authMiddleware.isAdmi
  *               newDate:
  *                 type: string
  *                 format: date
- *                 description: (Opcional) Nueva fecha de la cita en formato 'YYYY-MM-DD'.
+ *                 description: (Optional) New date of the appointment in 'YYYY-MM-DD' format.
  *               newTime:
  *                 type: string
- *                 description: (Opcional) Nueva hora de la cita en formato 'HH:mm'.
+ *                 description: (Optional) New time of the appointment in 'HH:mm' format.
  *     responses:
  *       '200':
- *         description: Cita actualizada con éxito.
+ *         description: Appointment updated successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -235,11 +235,11 @@ router.post('/appointment', authMiddleware.authMiddleware, authMiddleware.isAdmi
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 appointment:
  *                   $ref: '#/components/schemas/Appointment'
  *       '400':
- *         description: Error en la solicitud. Verifica los detalles en el mensaje de error.
+ *         description: Request error. Check the details in the error message.
  *         content:
  *           application/json:
  *             schema:
@@ -247,15 +247,15 @@ router.post('/appointment', authMiddleware.authMiddleware, authMiddleware.isAdmi
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *                 details:
  *                   type: object
- *                   description: Detalles adicionales sobre el error (si los hay).
+ *                   description: Additional details about the error (if any).
  *       '401':
- *         description: No autorizado. Se requiere un token de administrador válido.
+ *         description: Unauthorized. A valid administrator token is required.
  *         content:
  *           application/json:
  *             schema:
@@ -263,12 +263,12 @@ router.post('/appointment', authMiddleware.authMiddleware, authMiddleware.isAdmi
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *       '404':
- *         description: Cita no encontrada. Verifica el identificador de la cita.
+ *         description: Appointment not found. Check the appointment identifier.
  *         content:
  *           application/json:
  *             schema:
@@ -276,12 +276,12 @@ router.post('/appointment', authMiddleware.authMiddleware, authMiddleware.isAdmi
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *       '500':
- *         description: Error del servidor. Consulta los logs para más detalles.
+ *         description: Server error. Check the logs for more details.
  *         content:
  *           application/json:
  *             schema:
@@ -289,13 +289,13 @@ router.post('/appointment', authMiddleware.authMiddleware, authMiddleware.isAdmi
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *                 details:
  *                   type: object
- *                   description: Detalles adicionales sobre el error (si los hay).
+ *                   description: Additional details about the error (if any).
 */
 router.put('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware.isAdmin, appointmentController.updateAppointment)
 
@@ -303,28 +303,28 @@ router.put('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware.is
  * @swagger
  * /appointment/{aid}:
  *   delete:
- *     summary: Eliminar una cita existente
- *     description: Elimina una cita existente del sistema. Se requiere autenticación de administrador.
+ *     summary: Delete an existing appointment
+ *     description: Deletes an existing appointment from the system. Administrator authentication is required.
  *     tags: [Appointments]
  *     security:
- *       - bearerAuth: []  # Usa el token de autenticación (Admin) como parte del encabezado
+ *       - bearerAuth: []  # Uses the authentication token (Admin) as part of the header
  *     parameters:
  *       - in: path
  *         name: aid
  *         required: true
- *         description: Identificador único de la cita que se eliminará.
+ *         description: Unique identifier of the appointment to be deleted.
  *         schema:
  *           type: string
  *       - in: header
  *         name: Authorization
  *         required: true
- *         description: Token de autenticación del admin.
+ *         description: Admin authentication token.
  *         schema:
  *           type: string
  *           format: JWT
  *     responses:
  *       '200':
- *         description: Cita eliminada con éxito.
+ *         description: Appointment deleted successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -332,12 +332,12 @@ router.put('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware.is
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 message:
  *                   type: string
- *                   description: Mensaje informativo sobre la eliminación exitosa.
+ *                   description: Informative message about the successful deletion.
  *       '400':
- *         description: Error en la solicitud. Verifica los detalles en el mensaje de error.
+ *         description: Request error. Check the details in the error message.
  *         content:
  *           application/json:
  *             schema:
@@ -345,12 +345,12 @@ router.put('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware.is
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *       '401':
- *         description: No autorizado. Se requiere un token de administrador válido.
+ *         description: Unauthorized. A valid administrator token is required.
  *         content:
  *           application/json:
  *             schema:
@@ -358,12 +358,12 @@ router.put('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware.is
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *       '404':
- *         description: Cita no encontrada. Verifica el identificador de la cita.
+ *         description: Appointment not found. Check the appointment identifier.
  *         content:
  *           application/json:
  *             schema:
@@ -371,12 +371,12 @@ router.put('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware.is
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *       '500':
- *         description: Error del servidor. Consulta los logs para más detalles.
+ *         description: Server error. Check the logs for more details.
  *         content:
  *           application/json:
  *             schema:
@@ -384,10 +384,10 @@ router.put('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware.is
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
 */
 router.delete('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware.isAdmin, appointmentController.deleteAppointment)
 
@@ -395,12 +395,12 @@ router.delete('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware
  * @swagger
  * /appointments:
  *   get:
- *     summary: Obtener todas las citas
- *     description: Obtiene la lista de todas las citas en el sistema.
+ *     summary: Get all appointments
+ *     description: Retrieves the list of all appointments in the system.
  *     tags: [Appointments]
  *     responses:
  *       '200':
- *         description: Lista de citas obtenida con éxito.
+ *         description: List of appointments successfully obtained.
  *         content:
  *           application/json:
  *             schema:
@@ -408,39 +408,39 @@ router.delete('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 data:
  *                   type: array
- *                   description: Lista de citas.
+ *                   description: List of appointments.
  *                   items:
  *                     type: object
  *                     properties:
  *                       _id:
  *                         type: string
- *                         description: Identificador único de la cita.
+ *                         description: Unique identifier of the appointment.
  *                       doctor:
  *                         type: string
- *                         description: Identificador único del doctor asociado a la cita.
+ *                         description: Unique identifier of the doctor associated with the appointment.
  *                       date:
  *                         type: string
  *                         format: date
- *                         description: Fecha de la cita.
+ *                         description: Date of the appointment.
  *                       time:
  *                         type: string
- *                         description: Hora de la cita.
+ *                         description: Time of the appointment.
  *                       available:
  *                         type: boolean
- *                         description: Indica si la cita está disponible.
+ *                         description: Indicates if the appointment is available.
  *                       cancellationHistory:
  *                         type: array
- *                         description: Historial de cancelaciones de la cita.
+ *                         description: Cancellation history of the appointment.
  *                         items:
  *                           $ref: '#/components/schemas/CancellationHistory'
  *                       patient:
  *                         type: string
- *                         description: Identificador único del paciente asociado a la cita.
+ *                         description: Unique identifier of the patient associated with the appointment.
  *       '500':
- *         description: Error del servidor. Consulta los logs para más detalles.
+ *         description: Server error. Check the logs for more details.
  *         content:
  *           application/json:
  *             schema:
@@ -448,10 +448,10 @@ router.delete('/appointment/:aid', authMiddleware.authMiddleware, authMiddleware
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
 */
 router.get('/appointments', appointmentController.getAllAppointments)
 
@@ -459,19 +459,19 @@ router.get('/appointments', appointmentController.getAllAppointments)
  * @swagger
  * /appointment/doctor/{did}:
  *   get:
- *     summary: Obtener citas por doctor
- *     description: Obtiene la lista de citas asociadas a un doctor específico.
+ *     summary: Get appointments by doctor
+ *     description: Retrieves the list of appointments associated with a specific doctor.
  *     tags: [Appointments]
  *     parameters:
  *       - in: path
  *         name: did
  *         required: true
- *         description: Identificador único del doctor.
+ *         description: Unique identifier of the doctor.
  *         schema:
  *           type: string
  *     responses:
  *       '200':
- *         description: Lista de citas obtenida con éxito.
+ *         description: List of appointments successfully obtained.
  *         content:
  *           application/json:
  *             schema:
@@ -479,36 +479,36 @@ router.get('/appointments', appointmentController.getAllAppointments)
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 data:
  *                   type: array
- *                   description: Lista de citas asociadas al doctor.
+ *                   description: List of appointments associated with the doctor.
  *                   items:
  *                     type: object
  *                     properties:
  *                       _id:
  *                         type: string
- *                         description: Identificador único de la cita.
+ *                         description: Unique identifier of the appointment.
  *                       doctor:
  *                         type: string
- *                         description: Identificador único del doctor asociado a la cita.
+ *                         description: Unique identifier of the doctor associated with the appointment.
  *                       date:
  *                         type: string
  *                         format: date-time
- *                         description: Fecha y hora de la cita.
+ *                         description: Date and time of the appointment.
  *                       time:
  *                         type: string
- *                         description: Hora de la cita en formato 'HH:mm'.
+ *                         description: Time of the appointment in 'HH:mm' format.
  *                       available:
  *                         type: boolean
- *                         description: Indica si la cita está disponible.
+ *                         description: Indicates if the appointment is available.
  *                       cancellationHistory:
  *                         type: array
- *                         description: Historial de cancelaciones de la cita.
+ *                         description: Cancellation history of the appointment.
  *                         items:
  *                           $ref: '#/components/schemas/CancellationHistory'
  *       '500':
- *         description: Error del servidor. Consulta los logs para más detalles.
+ *         description: Server error. Check the logs for more details.
  *         content:
  *           application/json:
  *             schema:
@@ -516,10 +516,10 @@ router.get('/appointments', appointmentController.getAllAppointments)
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
 */
 router.get('/appointment/doctor/:did', appointmentController.getAppointmentsByDoctor)
 
@@ -527,19 +527,19 @@ router.get('/appointment/doctor/:did', appointmentController.getAppointmentsByDo
  * @swagger
  * /appointment/patient/{pid}:
  *   get:
- *     summary: Obtener citas por paciente
- *     description: Obtiene la lista de citas asociadas a un paciente específico.
+ *     summary: Get appointments by patient
+ *     description: Retrieves the list of appointments associated with a specific patient.
  *     tags: [Appointments]
  *     parameters:
  *       - in: path
  *         name: pid
  *         required: true
- *         description: Identificador único del paciente.
+ *         description: Unique identifier of the patient.
  *         schema:
  *           type: string
  *     responses:
  *       '200':
- *         description: Lista de citas obtenida con éxito.
+ *         description: List of appointments successfully obtained.
  *         content:
  *           application/json:
  *             schema:
@@ -547,36 +547,36 @@ router.get('/appointment/doctor/:did', appointmentController.getAppointmentsByDo
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 data:
  *                   type: array
- *                   description: Lista de citas asociadas al paciente.
+ *                   description: List of appointments associated with the patient.
  *                   items:
  *                     type: object
  *                     properties:
  *                       _id:
  *                         type: string
- *                         description: Identificador único de la cita.
+ *                         description: Unique identifier of the appointment.
  *                       doctor:
  *                         type: string
- *                         description: Identificador único del doctor asociado a la cita.
+ *                         description: Unique identifier of the doctor associated with the appointment.
  *                       date:
  *                         type: string
  *                         format: date-time
- *                         description: Fecha y hora de la cita.
+ *                         description: Date and time of the appointment.
  *                       time:
  *                         type: string
- *                         description: Hora de la cita en formato 'HH:mm'.
+ *                         description: Time of the appointment in 'HH:mm' format.
  *                       available:
  *                         type: boolean
- *                         description: Indica si la cita está disponible.
+ *                         description: Indicates if the appointment is available.
  *                       cancellationHistory:
  *                         type: array
- *                         description: Historial de cancelaciones de la cita.
+ *                         description: Cancellation history of the appointment.
  *                         items:
  *                           $ref: '#/components/schemas/CancellationHistory'
  *       '500':
- *         description: Error del servidor. Consulta los logs para más detalles.
+ *         description: Server error. Check the logs for more details.
  *         content:
  *           application/json:
  *             schema:
@@ -584,10 +584,10 @@ router.get('/appointment/doctor/:did', appointmentController.getAppointmentsByDo
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
 */
 router.get('/appointment/patient/:pid', appointmentController.getAppointmentsByPatient)
 
@@ -595,22 +595,22 @@ router.get('/appointment/patient/:pid', appointmentController.getAppointmentsByP
  * @swagger
  * /appointment/{aid}/reserve:
  *   post:
- *     summary: Reservar cita
- *     description: Reserva una cita específica para un paciente.
+ *     summary: Reserve appointment
+ *     description: Reserves a specific appointment for a patient.
  *     tags: [Appointments]
  *     security:
- *       - bearerAuth: []  # Usa el token de autenticación (paciente) como parte del encabezado
+ *       - bearerAuth: []  # Uses patient authentication token as part of the header
  *     parameters:
  *       - in: path
  *         name: aid
  *         required: true
- *         description: Identificador único de la cita a reservar.
+ *         description: Unique identifier of the appointment to be reserved.
  *         schema:
  *           type: string
  *       - in: header
  *         name: Authorization
  *         required: true
- *         description: Token de autenticación del paciente.
+ *         description: Patient's authentication token.
  *         schema:
  *           type: string
  *           format: JWT
@@ -623,10 +623,10 @@ router.get('/appointment/patient/:pid', appointmentController.getAppointmentsByP
  *             properties:
  *               patientID:
  *                 type: string
- *                 description: Identificador único del paciente que reserva la cita.
+ *                 description: Unique identifier of the patient reserving the appointment.
  *     responses:
  *       '200':
- *         description: Cita reservada con éxito.
+ *         description: Appointment successfully reserved.
  *         content:
  *           application/json:
  *             schema:
@@ -634,12 +634,12 @@ router.get('/appointment/patient/:pid', appointmentController.getAppointmentsByP
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 message:
  *                   type: string
- *                   description: Mensaje informativo sobre la reserva de la cita.
+ *                   description: Informational message about the appointment reservation.
  *       '400':
- *         description: Solicitud incorrecta. Comprueba los detalles del error.
+ *         description: Bad request. Check the error details.
  *         content:
  *           application/json:
  *             schema:
@@ -647,12 +647,12 @@ router.get('/appointment/patient/:pid', appointmentController.getAppointmentsByP
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *       '401':
- *         description: No autorizado. Se requiere un token de autenticación válido para pacientes.
+ *         description: Unauthorized. A valid patient authentication token is required.
  *         content:
  *           application/json:
  *             schema:
@@ -660,12 +660,12 @@ router.get('/appointment/patient/:pid', appointmentController.getAppointmentsByP
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *       '500':
- *         description: Error del servidor. Consulta los logs para más detalles.
+ *         description: Server error. Check the logs for more details.
  *         content:
  *           application/json:
  *             schema:
@@ -673,10 +673,10 @@ router.get('/appointment/patient/:pid', appointmentController.getAppointmentsByP
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
 */
 router.post('/appointment/:aid/reserve', authMiddleware.authMiddleware, authMiddleware.isPatient, appointmentController.reserveAppointment)
 
@@ -684,20 +684,20 @@ router.post('/appointment/:aid/reserve', authMiddleware.authMiddleware, authMidd
  * @swagger
  * /appointment/{aid}/cancel:
  *   post:
- *     summary: Cancelar cita
- *     description: Cancela una cita específica reservada por un paciente.
+ *     summary: Cancel appointment
+ *     description: Cancels a specific appointment reserved by a patient.
  *     tags: [Appointments]
  *     parameters:
  *       - in: path
  *         name: aid
  *         required: true
- *         description: Identificador único de la cita a cancelar.
+ *         description: Unique identifier of the appointment to cancel.
  *         schema:
  *           type: string
  *       - in: header
  *         name: Authorization
  *         required: true
- *         description: Token de autenticación del paciente.
+ *         description: Patient's authentication token.
  *         schema:
  *           type: string
  *           format: JWT
@@ -710,10 +710,10 @@ router.post('/appointment/:aid/reserve', authMiddleware.authMiddleware, authMidd
  *             properties:
  *               patientID:
  *                 type: string
- *                 description: Identificador único del paciente que cancela la cita.
+ *                 description: Unique identifier of the patient canceling the appointment.
  *     responses:
  *       '200':
- *         description: Cita cancelada con éxito.
+ *         description: Appointment canceled successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -721,12 +721,12 @@ router.post('/appointment/:aid/reserve', authMiddleware.authMiddleware, authMidd
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 message:
  *                   type: string
- *                   description: Mensaje informativo sobre la cancelación de la cita.
+ *                   description: Informational message about the appointment cancellation.
  *       '400':
- *         description: Solicitud incorrecta. Comprueba los detalles del error.
+ *         description: Bad request. Check the error details.
  *         content:
  *           application/json:
  *             schema:
@@ -734,12 +734,12 @@ router.post('/appointment/:aid/reserve', authMiddleware.authMiddleware, authMidd
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *       '401':
- *         description: No autorizado. Se requiere un token de autenticación válido para pacientes.
+ *         description: Unauthorized. A valid patient authentication token is required.
  *         content:
  *           application/json:
  *             schema:
@@ -747,12 +747,12 @@ router.post('/appointment/:aid/reserve', authMiddleware.authMiddleware, authMidd
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
  *       '500':
- *         description: Error del servidor. Consulta los logs para más detalles.
+ *         description: Server error. Check the logs for more details.
  *         content:
  *           application/json:
  *             schema:
@@ -760,10 +760,10 @@ router.post('/appointment/:aid/reserve', authMiddleware.authMiddleware, authMidd
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
 */
 router.post('/appointment/:aid/cancel', authMiddleware.authMiddleware, authMiddleware.isPatient, appointmentController.cancelAppointment)
 
@@ -771,19 +771,19 @@ router.post('/appointment/:aid/cancel', authMiddleware.authMiddleware, authMiddl
  * @swagger
  * /appointment/cancellation-history/{pid}:
  *   get:
- *     summary: Historial de cancelaciones de un paciente
- *     description: Obtiene el historial de cancelaciones de citas de un paciente.
+ *     summary: Patient's Cancellation History
+ *     description: Retrieves the cancellation history of appointments for a specific patient.
  *     tags: [Appointments]
  *     parameters:
  *       - in: path
  *         name: pid
  *         required: true
- *         description: Identificador único del paciente.
+ *         description: Unique identifier of the patient.
  *         schema:
  *           type: string
  *     responses:
  *       '200':
- *         description: Historial de cancelaciones obtenido con éxito.
+ *         description: Cancellation history retrieved successfully.
  *         content:
  *           application/json:
  *             schema:
@@ -791,14 +791,14 @@ router.post('/appointment/:aid/cancel', authMiddleware.authMiddleware, authMiddl
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 cancellationHistory:
  *                   type: array
- *                   description: Lista de cancelaciones del paciente.
+ *                   description: List of cancellations for the patient.
  *                   items:
  *                     $ref: '#/components/schemas/CancellationHistory'
  *       '404':
- *         description: No se encontró historial de cancelaciones para el paciente.
+ *         description: Cancellation history not found for the patient.
  *         content:
  *           application/json:
  *             schema:
@@ -806,12 +806,12 @@ router.post('/appointment/:aid/cancel', authMiddleware.authMiddleware, authMiddl
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 message:
  *                   type: string
- *                   description: Mensaje informativo sobre la falta de historial de cancelaciones.
+ *                   description: Informational message about the lack of cancellation history.
  *       '500':
- *         description: Error del servidor. Consulta los logs para más detalles.
+ *         description: Server error. Check the logs for more details.
  *         content:
  *           application/json:
  *             schema:
@@ -819,10 +819,10 @@ router.post('/appointment/:aid/cancel', authMiddleware.authMiddleware, authMiddl
  *               properties:
  *                 success:
  *                   type: boolean
- *                   description: Indica si la solicitud fue exitosa.
+ *                   description: Indicates if the request was successful.
  *                 error:
  *                   type: string
- *                   description: Descripción detallada del error.
+ *                   description: Detailed error description.
 */
 router.get('/appointment/cancellation-history/:pid', appointmentController.getCancellationHistoryByPatient)
 
