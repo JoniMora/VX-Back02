@@ -51,6 +51,16 @@ router.get('/specialties', specialtyController.getAllSpecialties)
  *     summary: Create a new specialty
  *     description: Creates a new medical specialty.
  *     tags: [Specialties]
+ *     security:
+ *       - bearerAuth: []  # Authentication token is required
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         description: Token de autenticación del admin.
+ *         schema:
+ *           type: string
+ *           format: JWT
  *     requestBody:
  *       required: true
  *       content:

@@ -109,6 +109,14 @@ router.get('/doctor/:id', doctorController.getDoctorDetails)
  *     tags: [Doctors]
  *     security:
  *       - bearerAuth: []  # Authentication token is required
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         description: Token de autenticación del admin.
+ *         schema:
+ *           type: string
+ *           format: JWT
  *     requestBody:
  *       required: true
  *       content:
@@ -174,6 +182,13 @@ router.post('/doctor', authMiddleware.authMiddleware, authMiddleware.isAdmin, do
  *         schema:
  *           type: string
  *           format: uuid
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         description: Token de autenticación del admin.
+ *         schema:
+ *           type: string
+ *           format: JWT
  *     requestBody:
  *       required: true
  *       content:
