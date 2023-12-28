@@ -14,12 +14,17 @@ exports.getAllSpecialties = async (req, res) => {
 exports.createSpecialty = async (req, res) => {
      const { name } = req.body   
      try {
+          const existingSpecialty = await Specialty.findOne({ name })
+
+          if (existingSpecialty) {
+               return res.status(409).json({ success: false, error: 'Specialty already exists.', existingSpecialty })
+          }
           const newSpecialty = new Specialty({ name })
           await newSpecialty.save()
      
           res.status(200).json({success: true, message: 'Specialty created successfully.' })
      } catch (error) {
           console.error(error)
-          es.status(500).json({success: false, error: 'Server error.' })
+          res.status(500).json({success: false, error: 'Server error.' })
      }
 }
