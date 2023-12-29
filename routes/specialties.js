@@ -10,6 +10,9 @@ const authMiddleware = require('../middlewares/authMiddleware')
  *     Specialty:
  *       type: object
  *       properties:
+ *         _id:
+ *           type: string
+ *           description: Unique identifier for the specialty.
  *         name:
  *           type: string
  *           description: Name of the specialty.
@@ -39,8 +42,29 @@ const authMiddleware = require('../middlewares/authMiddleware')
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Specialty'
+ *               example:
+ *                 success: true
+ *                 data:
+ *                   - _id: "657b5e06deedbb22b3455c96"
+ *                     name: "Cardiology"
+ *                   - _id: "657b6b284e782b8c8f2123a1"
+ *                     name: "Dermatology"
  *       '500':
  *         description: Server error. Check the logs for more details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the request was successful.
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating the reason for the failure.
+ *               example:
+ *                 success: false
+ *                 error: "Internal server error."
 */
 router.get('/specialties', specialtyController.getAllSpecialties)
 
@@ -67,6 +91,8 @@ router.get('/specialties', specialtyController.getAllSpecialties)
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Specialty'
+ *           example:
+ *             name: "Neurology"
  *     responses:
  *       '200':
  *         description: Specialty created successfully.
@@ -81,6 +107,9 @@ router.get('/specialties', specialtyController.getAllSpecialties)
  *                 message:
  *                   type: string
  *                   description: Informational message.
+ *               example:
+ *                 success: true
+ *                 message: "Specialty created successfully."
  *       '409':
  *         description: Conflict. A specialty with the same name already exists.
  *         content:
@@ -96,8 +125,28 @@ router.get('/specialties', specialtyController.getAllSpecialties)
  *                   description: Error message indicating that the specialty already exists.
  *                 existingSpecialty:
  *                   $ref: '#/components/schemas/Specialty'
+ *               example:
+ *                 success: false
+ *                 error: "Specialty already exists."
+ *                 existingSpecialty:
+ *                   _id: "657b5e06deedbb22b3455c96"
+ *                   name: "Neurology"
  *       '500':
  *         description: Server error. Check the logs for more details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the request was successful.
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating the reason for the failure.
+ *               example:
+ *                 success: false
+ *                 error: "Internal server error."
 */
 router.post('/specialties', authMiddleware.authMiddleware, authMiddleware.isAdmin, specialtyController.createSpecialty)
 
