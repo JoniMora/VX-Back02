@@ -38,6 +38,10 @@ const limiter = require('../middlewares/authMiddleware')
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/User'
+ *           example:
+ *             email: "user@example.com"
+ *             password: "password123"
+ *             role: "patient"
  *     responses:
  *       '200':
  *         description: Registered user successfully.
@@ -49,6 +53,8 @@ const limiter = require('../middlewares/authMiddleware')
  *                 token:
  *                   type: string
  *                   description: JWT token for user authentication.
+ *               example:
+ *                 token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
  *       '400':
  *         description: Bad Request. Check the required fields.
  *         content:
@@ -62,8 +68,25 @@ const limiter = require('../middlewares/authMiddleware')
  *                 error:
  *                   type: string
  *                   description: Error message indicating the reason for the failure.
+ *               example:
+ *                 success: false
+ *                 error: "Missing required fields."
  *       '500':
  *         description: Server error. Check the logs for more details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicate if the request was successful.
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating the reason for the failure.
+ *               example:
+ *                 success: false
+ *                 error: "Internal server error."
 */
 router.post('/register', authController.register)
 
@@ -90,6 +113,9 @@ router.post('/register', authController.register)
  *             required:
  *               - email
  *               - password
+ *           example:
+ *             email: "user@example.com"
+ *             password: "password123"
  *     responses:
  *       '200':
  *         description: Successful login.
@@ -101,6 +127,8 @@ router.post('/register', authController.register)
  *                 token:
  *                   type: string
  *                   description: JWT token for user authentication.
+ *               example:
+ *                 token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
  *       '401':
  *         description: Invalid credentials. Please check the email and password. 
  *         content:
@@ -114,8 +142,25 @@ router.post('/register', authController.register)
  *                 error:
  *                   type: string
  *                   description: Error message indicating invalid credentials.
+ *               example:
+ *                 success: false
+ *                 error: "Invalid email or password."
  *       '500':
  *         description: Server error. Check the logs for more details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicate whether the request was successful.
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating the reason for the failure.
+ *               example:
+ *                 success: false
+ *                 error: "Internal server error."
 */
 router.post('/login', authController.login)
 
@@ -138,6 +183,8 @@ router.post('/login', authController.login)
  *                 description: The email address of the registered user.
  *             required:
  *               - email
+ *           example:
+ *             email: "user@example.com"
  *     responses:
  *       '200':
  *         description: Password recovery email sent successfully.
@@ -152,6 +199,9 @@ router.post('/login', authController.login)
  *                 message:
  *                   type: string
  *                   description: Informational message.
+ *               example:
+ *                 success: true
+ *                 message: "Password recovery email sent successfully. Please check your inbox."
  *       '404':
  *         description: User not found.
  *         content:
@@ -165,8 +215,25 @@ router.post('/login', authController.login)
  *                 error:
  *                   type: string
  *                   description: Error message indicating that the user was not found.
+ *               example:
+ *                 success: false
+ *                 error: "User not found."
  *       '500':
  *         description: Server error. Check the logs for more details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicate if the request was successful.
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating the reason for the failure.
+ *               example:
+ *                 success: false
+ *                 error: "Internal server error."
 */
 router.post('/forgot-password', authController.forgotPassword)
 
@@ -196,6 +263,8 @@ router.post('/forgot-password', authController.forgotPassword)
  *                 description: The new password for the user.
  *             required:
  *               - newPassword
+ *           example:
+ *             newPassword: "newPassword123"
  *     responses:
  *       '200':
  *         description: Password reset successful.
@@ -210,6 +279,9 @@ router.post('/forgot-password', authController.forgotPassword)
  *                 message:
  *                   type: string
  *                   description: Informational message.
+ *               example:
+ *                 success: true
+ *                 message: "Password reset successful."
  *       '404':
  *         description: Recovery token not found or already used.
  *         content:
@@ -223,6 +295,9 @@ router.post('/forgot-password', authController.forgotPassword)
  *                 error:
  *                   type: string
  *                   description: Error message indicating that the recovery token was not found or has already been used.
+ *               example:
+ *                 success: false
+ *                 error: "Recovery token not found or already used."
  *       '400':
  *         description: Expired recovery token.
  *         content:
@@ -236,8 +311,25 @@ router.post('/forgot-password', authController.forgotPassword)
  *                 error:
  *                   type: string
  *                   description: Error message indicating that the recovery token has expired.
+ *               example:
+ *                 success: false
+ *                 error: "Expired recovery token."
  *       '500':
  *         description: Server error. Check the logs for more details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicate if the request was successful.
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating the reason for the failure.
+ *               example:
+ *                 success: false
+ *                 error: "Internal server error."
 */
 router.post('/reset-password/:recoveryToken', authController.resetPassword)
 
